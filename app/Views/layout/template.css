@@ -1,0 +1,7 @@
+table tbody tr {
+  transition: 0.2s;
+}
+
+table tbody tr:hover {
+  transform: scale(1.01);
+}
