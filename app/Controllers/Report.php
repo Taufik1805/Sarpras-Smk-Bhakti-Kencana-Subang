@@ -2,106 +2,71 @@
 
 namespace App\Controllers;
 
-use App\Models\ReportModel;
 use App\Models\ItemModel;
+use App\Models\PengadaanModel;
+use App\Models\PeminjamanModel;
+use App\Models\PengembalianModel;
 use Dompdf\Dompdf;
 
 class Report extends BaseController
 {
-    protected $reportModel;
     protected $itemModel;
+    protected $pengadaanModel;
+    protected $peminjamanModel;
+    protected $pengembalianModel;
 
     public function __construct()
     {
-        $this->reportModel = new ReportModel();
-        $this->itemModel   = new ItemModel();
+        $this->itemModel = new ItemModel();
+        $this->pengadaanModel = new PengadaanModel();
+        $this->peminjamanModel = new PeminjamanModel();
+        $this->pengembalianModel = new PengembalianModel();
     }
 
-    // =========================
-    // 📋 LIST + FILTER
-    // =========================
     public function index()
     {
-        $from = $this->request->getGet('from');
-        $to   = $this->request->getGet('to');
+        $data = [
+            'title' => 'Data Laporan',
 
-        $builder = $this->reportModel
-            ->select('reports.*, items.name')
-            ->join('items', 'items.id = reports.item_id', 'left');
+            'barang' => $this->itemModel->findAll(),
 
-        if ($from && $to) {
-            $builder->where('DATE(reports.created_at) >=', $from);
-            $builder->where('DATE(reports.created_at) <=', $to);
-        }
+            'pengadaan' => $this->pengadaanModel->findAll(),
 
-        $reports = $builder->findAll();
+            'peminjaman' => $this->peminjamanModel->findAll(),
 
-        return view('reports/index', [
-            'title'   => 'Data Laporan',
-            'reports' => $reports,
-            'from'    => $from,
-            'to'      => $to
-        ]);
+            'pengembalian' => $this->pengembalianModel->findAll()
+        ];
+
+        return view('reports/index', $data);
     }
 
-    // =========================
-    // ➕ FORM TAMBAH LAPORAN
-    // =========================
-    public function create()
-    {
-        $items = $this->itemModel->findAll();
-
-        return view('reports/create', [
-            'title' => 'Tambah Laporan',
-            'items' => $items
-        ]);
-    }
-
-    // =========================
-    // 💾 SIMPAN LAPORAN
-    // =========================
-    public function store()
-    {
-        $this->reportModel->save([
-            'item_id'     => $this->request->getPost('item_id'),
-            'description' => $this->request->getPost('description'),
-            'status'      => $this->request->getPost('status'),
-            'created_at'  => date('Y-m-d H:i:s'),
-        ]);
-
-        return redirect()->to('/reports')->with('success', 'Laporan berhasil ditambahkan');
-    }
-
-    // =========================
-    // 🧾 EXPORT PDF
-    // =========================
     public function exportPdf()
     {
-        $from = $this->request->getGet('from');
-        $to   = $this->request->getGet('to');
+        $data = [
+            'barang' => $this->itemModel->findAll(),
 
-        $builder = $this->reportModel
-            ->select('reports.*, items.name')
-            ->join('items', 'items.id = reports.item_id', 'left');
+            'pengadaan' => $this->pengadaanModel->findAll(),
 
-        if ($from && $to) {
-            $builder->where('DATE(reports.created_at) >=', $from);
-            $builder->where('DATE(reports.created_at) <=', $to);
-        }
+            'peminjaman' => $this->peminjamanModel->findAll(),
 
-        $reports = $builder->findAll();
+            'pengembalian' => $this->pengembalianModel->findAll()
+        ];
 
-        $html = view('reports/pdf', [
-            'reports' => $reports,
-            'from'    => $from,
-            'to'      => $to
-        ]);
+        $html = view('reports/pdf', $data);
 
         $dompdf = new Dompdf();
+
         $dompdf->loadHtml($html);
-        $dompdf->setPaper('A4', 'portrait');
+
+        $dompdf->setPaper('A4', 'landscape');
+
         $dompdf->render();
 
-        $dompdf->stream('laporan.pdf', ['Attachment' => false]);
+        $dompdf->stream(
+            'laporan_sarpras.pdf',
+            [
+                'Attachment' => true
+            ]
+        );
     }
 }

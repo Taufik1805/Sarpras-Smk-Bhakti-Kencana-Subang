@@ -9,13 +9,10 @@ class Item extends BaseController
     protected $itemModel;
 
     public function __construct()
-    {            
+    {
         $this->itemModel = new ItemModel();
     }
 
-    // =========================
-    // 📋 DATA + SEARCH + PAGINATION + STATUS
-    // =========================
     public function index()
     {
         $keyword = $this->request->getGet('keyword');
@@ -25,38 +22,34 @@ class Item extends BaseController
         if ($keyword) {
             $builder = $builder
                 ->groupStart()
-                    ->like('name', $keyword)
+                    ->like('kode_barang', $keyword)
+                    ->orLike('name', $keyword)
                     ->orLike('category', $keyword)
                     ->orLike('location', $keyword)
+                    ->orLike('jenis_aset', $keyword)
                 ->groupEnd();
         }
 
-        // 🔥 PAGINATION (5 DATA PER HALAMAN)
         $items = $builder->paginate(5);
         $pager = $this->itemModel->pager;
 
-        // 🔥 TOTAL
         $total = $this->itemModel->countAll();
 
-        // 🔥 STATUS (PAKAI MODEL BARU BIAR QUERY TIDAK TABRAK)
-        $baik   = (new ItemModel())->where('item_condition','baik')->countAllResults();
-        $rusak  = (new ItemModel())->where('item_condition','rusak')->countAllResults();
-        $hilang = (new ItemModel())->where('item_condition','hilang')->countAllResults();
+        $baik   = (new ItemModel())->where('item_condition', 'baik')->countAllResults();
+        $rusak  = (new ItemModel())->where('item_condition', 'rusak')->countAllResults();
+        $hilang = (new ItemModel())->where('item_condition', 'hilang')->countAllResults();
 
         return view('items/index', [
-            'title' => 'Data Barang',
-            'items' => $items,
-            'pager' => $pager,
-            'total' => $total,
-            'baik' => $baik,
-            'rusak' => $rusak,
+            'title'  => 'Data Barang',
+            'items'  => $items,
+            'pager'  => $pager,
+            'total'  => $total,
+            'baik'   => $baik,
+            'rusak'  => $rusak,
             'hilang' => $hilang
         ]);
     }
 
-    // =========================
-    // ➕ FORM TAMBAH
-    // =========================
     public function create()
     {
         return view('items/create', [
@@ -64,9 +57,6 @@ class Item extends BaseController
         ]);
     }
 
-    // =========================
-    // 💾 SIMPAN DATA
-    // =========================
     public function store()
     {
         $file = $this->request->getFile('image');
@@ -75,12 +65,15 @@ class Item extends BaseController
         if ($file && $file->isValid() && !$file->hasMoved()) {
 
             $ext = strtolower($file->getExtension());
+
             if (!in_array($ext, ['jpg', 'jpeg', 'png'])) {
-                return redirect()->back()->with('error', 'Format gambar harus JPG / PNG');
+                return redirect()->back()
+                    ->with('error', 'Format gambar harus JPG atau PNG');
             }
 
             if ($file->getSize() > 2048000) {
-                return redirect()->back()->with('error', 'Ukuran maksimal 2MB');
+                return redirect()->back()
+                    ->with('error', 'Ukuran gambar maksimal 2MB');
             }
 
             $imageName = $file->getRandomName();
@@ -88,43 +81,45 @@ class Item extends BaseController
         }
 
         $this->itemModel->save([
-            'name' => $this->request->getPost('name'),
-            'category' => $this->request->getPost('category'),
-            'stock' => $this->request->getPost('stock'),
+            'kode_barang'    => $this->request->getPost('kode_barang'),
+            'jenis_aset'     => $this->request->getPost('jenis_aset'),
+            'name'           => $this->request->getPost('name'),
+            'category'       => $this->request->getPost('category'),
+            'stock'          => $this->request->getPost('stock'),
+            'satuan'         => $this->request->getPost('satuan'),
             'item_condition' => $this->request->getPost('condition'),
-            'location' => $this->request->getPost('location'),
-            'image' => $imageName,
+            'location'       => $this->request->getPost('location'),
+            'keterangan'     => $this->request->getPost('keterangan'),
+            'image'          => $imageName,
         ]);
 
-        return redirect()->to('/items')->with('success', 'Data berhasil ditambahkan');
+        return redirect()->to('/items')
+            ->with('success', 'Data berhasil ditambahkan');
     }
 
-    // =========================
-    // ✏️ EDIT
-    // =========================
     public function edit($id)
     {
         $item = $this->itemModel->find($id);
 
         if (!$item) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException("Data tidak ditemukan");
+            throw new \CodeIgniter\Exceptions\PageNotFoundException(
+                'Data tidak ditemukan'
+            );
         }
 
         return view('items/edit', [
             'title' => 'Edit Barang',
-            'item' => $item
+            'item'  => $item
         ]);
     }
 
-    // =========================
-    // 🔄 UPDATE
-    // =========================
     public function update($id)
     {
         $item = $this->itemModel->find($id);
 
         if (!$item) {
-            return redirect()->back()->with('error', 'Data tidak ditemukan');
+            return redirect()->back()
+                ->with('error', 'Data tidak ditemukan');
         }
 
         $file = $this->request->getFile('image');
@@ -133,15 +128,21 @@ class Item extends BaseController
         if ($file && $file->isValid() && !$file->hasMoved()) {
 
             $ext = strtolower($file->getExtension());
+
             if (!in_array($ext, ['jpg', 'jpeg', 'png'])) {
-                return redirect()->back()->with('error', 'Format gambar harus JPG / PNG');
+                return redirect()->back()
+                    ->with('error', 'Format gambar harus JPG atau PNG');
             }
 
             if ($file->getSize() > 2048000) {
-                return redirect()->back()->with('error', 'Ukuran maksimal 2MB');
+                return redirect()->back()
+                    ->with('error', 'Ukuran gambar maksimal 2MB');
             }
 
-            if ($item['image'] && file_exists(FCPATH . 'uploads/' . $item['image'])) {
+            if (
+                $item['image'] &&
+                file_exists(FCPATH . 'uploads/' . $item['image'])
+            ) {
                 unlink(FCPATH . 'uploads/' . $item['image']);
             }
 
@@ -150,20 +151,22 @@ class Item extends BaseController
         }
 
         $this->itemModel->update($id, [
-            'name' => $this->request->getPost('name'),
-            'category' => $this->request->getPost('category'),
-            'stock' => $this->request->getPost('stock'),
+            'kode_barang'    => $this->request->getPost('kode_barang'),
+            'jenis_aset'     => $this->request->getPost('jenis_aset'),
+            'name'           => $this->request->getPost('name'),
+            'category'       => $this->request->getPost('category'),
+            'stock'          => $this->request->getPost('stock'),
+            'satuan'         => $this->request->getPost('satuan'),
             'item_condition' => $this->request->getPost('condition'),
-            'location' => $this->request->getPost('location'),
-            'image' => $imageName,
+            'location'       => $this->request->getPost('location'),
+            'keterangan'     => $this->request->getPost('keterangan'),
+            'image'          => $imageName,
         ]);
 
-        return redirect()->to('/items')->with('success', 'Data berhasil diupdate');
+        return redirect()->to('/items')
+            ->with('success', 'Data berhasil diupdate');
     }
 
-    // =========================
-    // 🗑️ DELETE AJAX
-    // =========================
     public function delete($id)
     {
         if ($this->request->isAJAX()) {
@@ -177,7 +180,10 @@ class Item extends BaseController
                 ]);
             }
 
-            if ($item['image'] && file_exists(FCPATH . 'uploads/' . $item['image'])) {
+            if (
+                $item['image'] &&
+                file_exists(FCPATH . 'uploads/' . $item['image'])
+            ) {
                 unlink(FCPATH . 'uploads/' . $item['image']);
             }
 

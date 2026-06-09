@@ -10,12 +10,15 @@ class ItemModel extends Model
     protected $primaryKey = 'id';
 
     protected $allowedFields = [
+        'kode_barang',
+        'jenis_aset',
         'name',
         'category',
         'stock',
-         'item_condition',
+        'item_condition',
         'location',
-        'image' // 🔥 WAJIB TAMBAH INI
+        'keterangan',
+        'image'
     ];
 
     protected $useTimestamps = true;

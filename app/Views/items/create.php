@@ -1,3 +1,4 @@
+```php
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
@@ -30,7 +31,6 @@
     color: #666;
 }
 
-/* 🔥 FIX TEXT */
 .input-group-custom input,
 .input-group-custom select,
 .input-group-custom textarea {
@@ -42,7 +42,6 @@
     font-weight: 500;
 }
 
-/* 🔥 FIX PLACEHOLDER */
 .input-group-custom input::placeholder,
 textarea::placeholder {
     color: #777;
@@ -90,7 +89,7 @@ label {
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="form-title">
-                📦 Form Tambah Barang
+                Form Tambah Barang
             </div>
 
             <button type="reset" class="btn btn-reset">
@@ -102,13 +101,34 @@ label {
 
             <div class="row">
 
-                <!-- KIRI -->
                 <div class="col-md-6">
+
+                    <label>Kode Barang</label>
+                    <div class="input-group-custom mb-3">
+                        <i class="fa fa-barcode"></i>
+                        <input type="text"
+                               name="kode_barang"
+                               placeholder="Contoh: BK-001"
+                               required>
+                    </div>
+
+                    <label>Jenis Aset</label>
+                    <div class="input-group-custom mb-3">
+                        <i class="fa fa-building"></i>
+                        <select name="jenis_aset" required>
+                            <option value="">Pilih Jenis Aset</option>
+                            <option value="Sarana">Sarana</option>
+                            <option value="Prasarana">Prasarana</option>
+                        </select>
+                    </div>
 
                     <label>Nama Barang</label>
                     <div class="input-group-custom mb-3">
                         <i class="fa fa-box"></i>
-                        <input type="text" name="name" placeholder="Masukkan Nama Barang" required>
+                        <input type="text"
+                               name="name"
+                               placeholder="Masukkan Nama Barang"
+                               required>
                     </div>
 
                     <label>Kategori</label>
@@ -118,6 +138,9 @@ label {
                             <option value="">Pilih Kategori</option>
                             <option>Alat Kebersihan</option>
                             <option>Peralatan Sekolah</option>
+                            <option>Elektronik</option>
+                            <option>Furniture</option>
+                            <option>Laboratorium</option>
                         </select>
                     </div>
 
@@ -135,33 +158,42 @@ label {
                     <label>Lokasi</label>
                     <div class="input-group-custom mb-3">
                         <i class="fa fa-map-marker-alt"></i>
-                        <input type="text" name="location" placeholder="Masukkan Lokasi" required>
+                        <input type="text"
+                               name="location"
+                               placeholder="Masukkan Lokasi"
+                               required>
                     </div>
 
                 </div>
 
-                <!-- KANAN -->
                 <div class="col-md-6">
 
                     <label>Stok</label>
                     <div class="input-group-custom mb-3">
                         <i class="fa fa-hashtag"></i>
-                        <input type="number" name="stock" placeholder="Masukkan Jumlah Stok" required>
+                        <input type="number"
+                               name="stock"
+                               placeholder="Masukkan Jumlah Stok"
+                               required>
                     </div>
 
                     <label>Satuan</label>
                     <div class="input-group-custom mb-3">
                         <i class="fa fa-ruler"></i>
-                        <select>
-                            <option>Pilih Satuan</option>
-                            <option>Unit</option>
-                            <option>Buah</option>
+                        <select name="satuan" required>
+                            <option value="">Pilih Satuan</option>
+                            <option value="Unit">Unit</option>
+                            <option value="Buah">Buah</option>
+                            <option value="Set">Set</option>
+                            <option value="Paket">Paket</option>
                         </select>
                     </div>
 
                     <label>Keterangan</label>
                     <div class="input-group-custom mb-3">
-                        <textarea placeholder="Masukkan Keterangan (opsional)"></textarea>
+                        <textarea
+                            name="keterangan"
+                            placeholder="Masukkan Keterangan (opsional)"></textarea>
                     </div>
 
                     <label>Gambar</label>
@@ -173,11 +205,13 @@ label {
 
             </div>
 
-            <!-- BUTTON -->
             <div class="form-footer">
-                <a href="<?= site_url('items') ?>" class="btn btn-light">Batal</a>
+                <a href="<?= site_url('items') ?>" class="btn btn-light">
+                    Batal
+                </a>
+
                 <button type="submit" class="btn btn-simpan">
-                    💾 Simpan
+                    Simpan
                 </button>
             </div>
 
@@ -188,3 +222,4 @@ label {
 </div>
 
 <?= $this->endSection() ?>
+```

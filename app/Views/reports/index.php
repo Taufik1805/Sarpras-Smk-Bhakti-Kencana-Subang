@@ -1,65 +1,250 @@
 <?= $this->extend('layout/template') ?>
 <?= $this->section('content') ?>
 
-<h3 class="mb-4">📋 Data Laporan</h3>
+<div class="container-fluid">
 
-<form method="get" class="row g-3 mb-3">
+    <h2 class="mb-4">
+        📊 Laporan Sistem Sarana dan Prasarana
+    </h2>
 
-    <div class="col-md-3">
-        <input type="date" name="from" class="form-control" value="<?= $from ?>">
+    <!-- DATA BARANG -->
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-primary text-white">
+            Data Barang
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Barang</th>
+                        <th>Nama Barang</th>
+                        <th>Kategori</th>
+                        <th>Stok</th>
+                        <th>Kondisi</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                <?php if(!empty($barang)): ?>
+
+                    <?php $no=1; ?>
+
+                    <?php foreach($barang as $b): ?>
+
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $b['kode_barang'] ?></td>
+                        <td><?= $b['name'] ?></td>
+                        <td><?= $b['category'] ?></td>
+                        <td><?= $b['stock'] ?></td>
+                        <td><?= ucfirst($b['item_condition']) ?></td>
+                    </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Tidak ada data barang
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-    <div class="col-md-3">
-        <input type="date" name="to" class="form-control" value="<?= $to ?>">
+    <!-- DATA PENGADAAN -->
+    <div class="card shadow mb-4">
+
+        <div class="card-header bg-success text-white">
+            Data Pengadaan
+        </div>
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama Barang</th>
+                        <th>Jenis Aset</th>
+                        <th>Jumlah</th>
+                        <th>Pemasok</th>
+                        <th>Total Harga</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                <?php if(!empty($pengadaan)): ?>
+
+                    <?php $no=1; ?>
+
+                    <?php foreach($pengadaan as $p): ?>
+
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $p['kode_pengadaan'] ?></td>
+                        <td><?= $p['nama_barang'] ?></td>
+                        <td><?= $p['jenis_aset'] ?></td>
+                        <td><?= $p['jumlah'] ?></td>
+                        <td><?= $p['pemasok'] ?></td>
+                        <td>Rp <?= number_format($p['total_harga'],0,',','.') ?></td>
+                        <td><?= ucfirst($p['status']) ?></td>
+                    </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="8" class="text-center">
+                            Tidak ada data pengadaan
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-    <div class="col-md-4">
-        <button class="btn btn-success">Filter</button>
+    <!-- DATA PEMINJAMAN -->
+    <div class="card shadow mb-4">
 
-        <a href="<?= base_url('/reports') ?>" class="btn btn-secondary">Reset</a>
+        <div class="card-header bg-warning">
+            Data Peminjaman
+        </div>
 
-        <a href="<?= base_url('/reports/pdf?from='.$from.'&to='.$to) ?>" class="btn btn-danger">
-            Export PDF
-        </a>
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped">
+
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Peminjaman</th>
+                        <th>Nama Peminjam</th>
+                        <th>Jumlah</th>
+                        <th>Tanggal Pinjam</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                <?php if(!empty($peminjaman)): ?>
+
+                    <?php $no=1; ?>
+
+                    <?php foreach($peminjaman as $p): ?>
+
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $p['kode_peminjaman'] ?></td>
+                        <td><?= $p['nama_peminjam'] ?></td>
+                        <td><?= $p['jumlah'] ?></td>
+                        <td><?= $p['tanggal_pinjam'] ?></td>
+                        <td><?= ucfirst($p['status']) ?></td>
+                    </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="6" class="text-center">
+                            Tidak ada data peminjaman
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
 
-</form>
+    <!-- DATA PENGEMBALIAN -->
+    <div class="card shadow">
 
-<div class="card shadow">
-<div class="card-body">
+        <div class="card-header bg-danger text-white">
+            Data Pengembalian
+        </div>
 
-<table class="table table-bordered table-hover">
-<thead class="table-dark">
-<tr>
-    <th>No</th>
-    <th>Barang</th>
-    <th>Deskripsi</th>
-    <th>Status</th>
-</tr>
-</thead>
+        <div class="card-body">
 
-<tbody>
-<?php $no=1; foreach($reports as $r): ?>
-<tr>
-<td><?= $no++ ?></td>
-<td><?= $r['name'] ?></td>
-<td><?= $r['description'] ?></td>
-<td>
-<?php if($r['status']=='rusak'): ?>
-    <span class="badge bg-danger">Rusak</span>
-<?php elseif($r['status']=='hilang'): ?>
-    <span class="badge bg-dark">Hilang</span>
-<?php else: ?>
-    <span class="badge bg-success"><?= $r['status'] ?></span>
-<?php endif; ?>
-</td>
-</tr>
-<?php endforeach; ?>
-</tbody>
+            <table class="table table-bordered table-striped">
 
-</table>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode Pengembalian</th>
+                        <th>Tanggal Kembali</th>
+                        <th>Kondisi Barang</th>
+                        <th>Keterangan</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                <?php if(!empty($pengembalian)): ?>
+
+                    <?php $no=1; ?>
+
+                    <?php foreach($pengembalian as $p): ?>
+
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td><?= $p['kode_pengembalian'] ?></td>
+                        <td><?= $p['tanggal_kembali'] ?></td>
+                        <td><?= ucfirst($p['kondisi_barang']) ?></td>
+                        <td><?= $p['keterangan'] ?></td>
+                    </tr>
+
+                    <?php endforeach; ?>
+
+                <?php else: ?>
+
+                    <tr>
+                        <td colspan="5" class="text-center">
+                            Tidak ada data pengembalian
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
 
 </div>
-</div>
 
-<?= $this->endSection() ?>
+<?= $this->endSection() ?>v

@@ -1,107 +1,169 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <style>
-        body {
-            font-family: Arial;
-            font-size: 12px;
-        }
+<meta charset="UTF-8">
 
-        .kop {
-            margin-bottom: 20px;
-        }
+<title>Laporan Sarana dan Prasarana</title>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+<style>
 
-        th, td {
-            border: 1px solid black;
-            padding: 6px;
-            text-align: center;
-        }
+body{
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+}
 
-        th {
-            background-color: #eee;
-        }
+h2{
+    text-align:center;
+    margin-bottom:20px;
+}
 
-        .ttd {
-            margin-top: 50px;
-            text-align: right;
-        }
-    </style>
+h3{
+    margin-top:20px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-bottom:20px;
+}
+
+th,td{
+    border:1px solid #000;
+    padding:5px;
+}
+
+th{
+    background:#d9d9d9;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<?php
-// 🔥 FIX LOGO DOMPDF (BASE64)
-$path = ROOTPATH . 'public/logo.png';
+<h2>LAPORAN SARANA DAN PRASARANA</h2>
 
-$base64 = '';
-if (is_file($path)) {
-    $image = file_get_contents($path);
-    $base64 = 'data:image/png;base64,' . base64_encode($image);
-}
-?>
+<h3>Data Barang</h3>
 
-<!-- 🔥 KOP SURAT -->
-<div class="kop">
-    <table>
-        <tr>
-            <!-- LOGO -->
-            <td width="15%" style="border: none;">
-                <?php if ($base64): ?>
-                    <img src="<?= $base64 ?>" width="80">
-                <?php endif; ?>
-            </td>
-
-            <!-- TEXT -->
-            <td width="85%" style="border: none; text-align: center;">
-                <h2 style="margin:0;">SMK Bhakti Kencana Subang</h2>
-                <h4 style="margin:0;">Laporan Sarana dan Prasarana</h4>
-                <p style="margin:0;">Jl. Contoh No.123 Subang</p>
-            </td>
-        </tr>
-    </table>
-
-    <hr style="border:2px solid black;">
-</div>
-
-<!-- 🔥 TANGGAL -->
-<p><b>Tanggal Cetak:</b> <?= date('d-m-Y') ?></p>
-
-<!-- 🔥 TABEL DATA -->
 <table>
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Barang</th>
-            <th>Deskripsi</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php $no = 1; foreach ($reports as $r): ?>
-        <tr>
-            <td><?= $no++ ?></td>
-            <td><?= $r['name'] ?></td>
-            <td><?= $r['description'] ?></td>
-            <td><?= $r['status'] ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </tbody>
+
+<tr>
+    <th>No</th>
+    <th>Kode Barang</th>
+    <th>Nama Barang</th>
+    <th>Jenis Aset</th>
+    <th>Kategori</th>
+    <th>Stok</th>
+    <th>Kondisi</th>
+</tr>
+
+<?php $no=1; ?>
+
+<?php foreach($barang as $b): ?>
+
+<tr>
+    <td><?= $no++ ?></td>
+    <td><?= $b['kode_barang'] ?></td>
+    <td><?= $b['name'] ?></td>
+    <td><?= $b['jenis_aset'] ?></td>
+    <td><?= $b['category'] ?></td>
+    <td><?= $b['stock'] ?></td>
+    <td><?= ucfirst($b['item_condition']) ?></td>
+</tr>
+
+<?php endforeach; ?>
+
 </table>
 
-<!-- 🔥 TANDA TANGAN -->
-<div class="ttd">
-    <p>Subang, <?= date('d-m-Y') ?></p>
-    <p>Kepala Sekolah</p>
 
-    <br><br><br>
+<h3>Data Pengadaan</h3>
 
-    <p><b>(Nama Kepala Sekolah)</b></p>
-</div>
+<table>
+
+<tr>
+    <th>No</th>
+    <th>Barang</th>
+    <th>Pemasok</th>
+    <th>Total</th>
+    <th>Status</th>
+</tr>
+
+<?php $no=1; ?>
+
+<?php foreach($pengadaan as $p): ?>
+
+<tr>
+    <td><?= $no++ ?></td>
+    <td><?= $p['item_name'] ?></td>
+    <td><?= $p['supplier'] ?></td>
+    <td><?= number_format($p['total'],0,',','.') ?></td>
+    <td><?= ucfirst($p['status']) ?></td>
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+
+
+<h3>Data Peminjaman</h3>
+
+<table>
+
+<tr>
+    <th>No</th>
+    <th>Kode</th>
+    <th>Peminjam</th>
+    <th>Jumlah</th>
+    <th>Tanggal Pinjam</th>
+    <th>Status</th>
+</tr>
+
+<?php $no=1; ?>
+
+<?php foreach($peminjaman as $p): ?>
+
+<tr>
+    <td><?= $no++ ?></td>
+    <td><?= $p['kode_peminjaman'] ?></td>
+    <td><?= $p['nama_peminjam'] ?></td>
+    <td><?= $p['jumlah'] ?></td>
+    <td><?= $p['tanggal_pinjam'] ?></td>
+    <td><?= ucfirst($p['status']) ?></td>
+</tr>
+
+<?php endforeach; ?>
+
+</table>
+
+
+<h3>Data Pengembalian</h3>
+
+<table>
+
+<tr>
+    <th>No</th>
+    <th>Kode Pengembalian</th>
+    <th>Tanggal Kembali</th>
+    <th>Kondisi Barang</th>
+    <th>Keterangan</th>
+</tr>
+
+<?php $no=1; ?>
+
+<?php foreach($pengembalian as $p): ?>
+
+<tr>
+    <td><?= $no++ ?></td>
+    <td><?= $p['kode_pengembalian'] ?></td>
+    <td><?= $p['tanggal_kembali'] ?></td>
+    <td><?= ucfirst($p['kondisi_barang']) ?></td>
+    <td><?= $p['keterangan'] ?></td>
+</tr>
+
+<?php endforeach; ?>
+
+</table>
 
 </body>
 </html>
