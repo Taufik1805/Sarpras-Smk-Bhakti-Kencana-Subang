@@ -137,75 +137,94 @@ body{
 
     <div class="menu">
 
-        <?php if(session()->get('role') == 'admin'): ?>
+    <?php if(session()->get('role') == 'admin'): ?>
 
-            <a href="<?= site_url('dashboard') ?>"
-               class="<?= $uri->getSegment(1)=='dashboard' ? 'active' : '' ?>">
-                <i class="fa fa-home"></i>
-                Dashboard
-            </a>
+        <a href="<?= site_url('dashboard') ?>"
+           class="<?= $uri->getSegment(1)=='dashboard' ? 'active' : '' ?>">
+            <i class="fa fa-home"></i>
+            Dashboard
+        </a>
 
-            <a href="<?= site_url('items') ?>"
-               class="<?= $uri->getSegment(1)=='items' ? 'active' : '' ?>">
-                <i class="fa fa-box"></i>
-                Data Barang
-            </a>
+        <a href="<?= site_url('items') ?>"
+           class="<?= $uri->getSegment(1)=='items' ? 'active' : '' ?>">
+            <i class="fa fa-box"></i>
+            Data Barang
+        </a>
 
-            <a href="<?= site_url('pengadaan') ?>"
-               class="<?= $uri->getSegment(1)=='pengadaan' ? 'active' : '' ?>">
-                <i class="fa fa-shopping-cart"></i>
-                Pengadaan
-            </a>
+        <a href="<?= site_url('pengadaan') ?>"
+           class="<?= $uri->getSegment(1)=='pengadaan' ? 'active' : '' ?>">
+            <i class="fa fa-shopping-cart"></i>
+            Pengadaan
+        </a>
 
-            <a href="<?= site_url('peminjaman') ?>"
-               class="<?= $uri->getSegment(1)=='peminjaman' ? 'active' : '' ?>">
-                <i class="fa fa-handshake"></i>
-                Peminjaman
-            </a>
+        <a href="<?= site_url('peminjaman') ?>"
+           class="<?= $uri->getSegment(1)=='peminjaman' ? 'active' : '' ?>">
+            <i class="fa fa-handshake"></i>
+            Peminjaman
+        </a>
 
-            <a href="<?= site_url('pengembalian') ?>"
-               class="<?= $uri->getSegment(1)=='pengembalian' ? 'active' : '' ?>">
-                <i class="fa fa-undo"></i>
-                Pengembalian
-            </a>
+        <a href="<?= site_url('pengembalian') ?>"
+           class="<?= $uri->getSegment(1)=='pengembalian' ? 'active' : '' ?>">
+            <i class="fa fa-undo"></i>
+            Pengembalian
+        </a>
 
-            <a href="<?= site_url('reports') ?>"
-               class="<?= $uri->getSegment(1)=='reports' ? 'active' : '' ?>">
-                <i class="fa fa-chart-bar"></i>
-                Laporan
-            </a>
+        <a href="<?= site_url('reports') ?>"
+           class="<?= $uri->getSegment(1)=='reports' ? 'active' : '' ?>">
+            <i class="fa fa-chart-bar"></i>
+            Laporan
+        </a>
 
-            <a href="<?= site_url('users') ?>"
-               class="<?= $uri->getSegment(1)=='users' ? 'active' : '' ?>">
-                <i class="fa fa-users"></i>
-                Pengguna
-            </a>
+        <a href="<?= site_url('users') ?>"
+           class="<?= $uri->getSegment(1)=='users' ? 'active' : '' ?>">
+            <i class="fa fa-users"></i>
+            Pengguna
+        </a>
 
-        <?php endif; ?>
+    <?php endif; ?>
 
-        <?php if(session()->get('role') == 'guru'): ?>
 
-            <a href="<?= site_url('dashboard-guru') ?>"
-               class="<?= $uri->getSegment(1)=='dashboard-guru' ? 'active' : '' ?>">
-                <i class="fa fa-home"></i>
-                Dashboard Guru
-            </a>
+    <?php if(session()->get('role') == 'guru'): ?>
 
-            <a href="<?= site_url('peminjaman') ?>"
-               class="<?= $uri->getSegment(1)=='peminjaman' ? 'active' : '' ?>">
-                <i class="fa fa-handshake"></i>
-                Peminjaman
-            </a>
+        <a href="<?= site_url('dashboard-guru') ?>"
+           class="<?= $uri->getSegment(1)=='dashboard-guru' ? 'active' : '' ?>">
+            <i class="fa fa-home"></i>
+            Dashboard Guru
+        </a>
 
-            <a href="<?= site_url('pengembalian') ?>"
-               class="<?= $uri->getSegment(1)=='pengembalian' ? 'active' : '' ?>">
-                <i class="fa fa-undo"></i>
-                Pengembalian
-            </a>
+        <a href="<?= site_url('peminjaman') ?>"
+           class="<?= $uri->getSegment(1)=='peminjaman' ? 'active' : '' ?>">
+            <i class="fa fa-handshake"></i>
+            Peminjaman
+        </a>
 
-        <?php endif; ?>
+        <a href="<?= site_url('pengembalian') ?>"
+           class="<?= $uri->getSegment(1)=='pengembalian' ? 'active' : '' ?>">
+            <i class="fa fa-undo"></i>
+            Pengembalian
+        </a>
 
-    </div>
+    <?php endif; ?>
+
+
+    <?php if(session()->get('role') == 'kepala_sekolah'): ?>
+
+        <a href="<?= site_url('dashboard-kepsek') ?>"
+           class="<?= $uri->getSegment(1)=='dashboard-kepsek' ? 'active' : '' ?>">
+            <i class="fa fa-home"></i>
+            Dashboard Kepala Sekolah
+        </a>
+
+        <a href="<?= site_url('reports') ?>"
+           class="<?= $uri->getSegment(1)=='reports' ? 'active' : '' ?>">
+            <i class="fa fa-chart-bar"></i>
+            Laporan
+        </a>
+
+    <?php endif; ?>
+
+</div>
+
 
 </div>
 

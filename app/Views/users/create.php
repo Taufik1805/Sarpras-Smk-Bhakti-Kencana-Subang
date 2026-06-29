@@ -46,19 +46,13 @@
 
             <label>Role</label>
 
-            <select name="role"
-                    class="form-control">
-
-                <option value="admin">
-                    Admin
-                </option>
-
-                <option value="guru">
-                    Guru
-                </option>
-
+           <select name="role" class="form-control" required>
+            <option value="">-- Pilih Role --</option>
+            <option value="admin">Admin</option>
+             <option value="guru">Guru</option>
+              <option value="kepala_sekolah">Kepala Sekolah</option>
             </select>
-
+            
         </div>
 
         <button class="btn btn-success">

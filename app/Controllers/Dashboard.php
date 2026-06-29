@@ -19,6 +19,7 @@ class Dashboard extends BaseController
         $this->pengembalianModel = new PengembalianModel();
     }
 
+    // Dashboard Admin
     public function index()
     {
         if (session()->get('role') != 'admin') {
@@ -83,6 +84,7 @@ class Dashboard extends BaseController
         ]);
     }
 
+    // Dashboard Guru
     public function guru()
     {
         if (session()->get('role') != 'guru') {
@@ -100,6 +102,65 @@ class Dashboard extends BaseController
             'totalBarang' => $totalBarang,
             'totalPeminjaman' => $totalPeminjaman,
             'totalPengembalian' => $totalPengembalian
+        ]);
+    }
+
+    // Dashboard Kepala Sekolah
+    public function kepsek()
+    {
+        if (session()->get('role') != 'kepala_sekolah') {
+            return redirect()->to('/');
+        }
+
+        $total = $this->itemModel->countAll();
+
+        $sarana = $this->itemModel
+            ->where('jenis_aset', 'Sarana')
+            ->countAllResults();
+
+        $prasarana = $this->itemModel
+            ->where('jenis_aset', 'Prasarana')
+            ->countAllResults();
+
+        $baik = $this->itemModel
+            ->where('item_condition', 'baik')
+            ->countAllResults();
+
+        $rusak = $this->itemModel
+            ->where('item_condition', 'rusak')
+            ->countAllResults();
+
+        $hilang = $this->itemModel
+            ->where('item_condition', 'hilang')
+            ->countAllResults();
+
+        $habis = $this->itemModel
+            ->where('item_condition', 'habis')
+            ->countAllResults();
+
+        $kategoriData = $this->itemModel
+            ->select('category, COUNT(*) as total')
+            ->groupBy('category')
+            ->findAll();
+
+        $barangRusak = $this->itemModel
+            ->where('item_condition', 'rusak')
+            ->findAll();
+
+        return view('dashboard_kepsek', [
+            'title' => 'Dashboard Kepala Sekolah',
+
+            'total' => $total,
+            'sarana' => $sarana,
+            'prasarana' => $prasarana,
+
+            'baik' => $baik,
+            'rusak' => $rusak,
+            'hilang' => $hilang,
+            'habis' => $habis,
+
+            'kategoriData' => $kategoriData,
+            'barangRusak' => $barangRusak
         ]);
     }
 }

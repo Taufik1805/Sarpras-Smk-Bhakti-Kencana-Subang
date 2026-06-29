@@ -4,92 +4,185 @@
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+
 <style>
-.page-title {
-    background: #1f2a6c;
-    color: white;
-    padding: 12px 20px;
-    font-weight: bold;
-    border-radius: 10px;
+
+.page-title{
+    background:#1f2a6c;
+    color:white;
+    padding:15px 25px;
+    font-weight:700;
+    font-size:24px;
+    border-radius:12px;
+    margin-bottom:20px;
 }
 
-.btn-add {
-    background: #8ec5d6;
-    border-radius: 10px;
-    padding: 8px 15px;
-    text-decoration: none;
-    color: black;
+.btn-add{
+    background:#8ec5d6;
+    border:none;
+    border-radius:12px;
+    padding:12px 20px;
+    text-decoration:none;
+    color:#000;
+    font-weight:600;
+    transition:.3s;
 }
 
-.search-box {
-    background: #cde7ef;
-    border-radius: 10px;
-    border: none;
-    padding: 8px;
+.btn-add:hover{
+    background:#6fb3c8;
+    color:#000;
 }
 
-.total-box {
-    background: #8ec5d6;
-    padding: 10px;
-    border-radius: 10px;
-    margin-bottom: 10px;
+.search-box{
+    background:#cde7ef;
+    border:none;
+    border-radius:12px;
+    padding:10px 15px;
+    min-width:250px;
 }
 
-.stock {
-    background: #2c3e75;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 8px;
-    font-weight: bold;
+.total-box{
+    background:#8ec5d6;
+    padding:15px;
+    border-radius:12px;
+    margin-bottom:15px;
+    font-size:20px;
+    font-weight:600;
 }
 
-.kondisi {
-    background: #dcdcdc;
-    padding: 6px 12px;
-    border-radius: 8px;
+.table{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
 }
 
-.btn-edit {
-    background: #ffd54f;
+.table thead{
+    background:#8ec5d6;
 }
 
-.btn-delete {
-    background: red;
-    color: white;
+.table th{
+    text-align:center;
+    vertical-align:middle;
+    font-weight:700;
 }
 
-.status-box {
-    padding: 8px 20px;
-    border-radius: 5px;
-    margin-right: 10px;
+.table td{
+    vertical-align:middle;
 }
 
-.status-baik {
-    background: #8ec5d6;
+.stock{
+    background:#2c3e75;
+    color:white;
+    padding:8px 14px;
+    border-radius:10px;
+    font-weight:bold;
+    display:inline-block;
 }
 
-.status-rusak {
-    background: red;
-    color: white;
+.kondisi{
+    background:#dcdcdc;
+    padding:8px 14px;
+    border-radius:10px;
+    display:inline-block;
 }
 
-.status-hilang {
-    background: yellow;
+.badge-sarana{
+    background:#198754;
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    font-weight:600;
 }
 
-.badge-sarana {
-    background: #198754;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 6px;
+.badge-prasarana{
+    background:#0d6efd;
+    color:white;
+    padding:8px 12px;
+    border-radius:8px;
+    font-weight:600;
 }
 
-.badge-prasarana {
-    background: #0d6efd;
-    color: white;
-    padding: 6px 10px;
-    border-radius: 6px;
+.btn-edit{
+    background:#ffd54f;
+    border:none;
 }
+
+.btn-delete{
+    background:#ff0000;
+    color:white;
+    border:none;
+}
+
+.btn-edit:hover,
+.btn-delete:hover{
+    transform:scale(1.05);
+}
+
+.status-box{
+    padding:12px 25px;
+    border-radius:12px;
+    font-weight:bold;
+    margin-left:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.08);
+}
+
+.status-baik{
+    background:#8ec5d6;
+}
+
+.status-rusak{
+    background:#ff0000;
+    color:white;
+}
+
+.status-hilang{
+    background:#fff200;
+}
+
+.pagination{
+    display:flex;
+    gap:8px;
+    list-style:none;
+    padding:0;
+    margin-top:10px;
+}
+
+.pagination li a{
+    display:block;
+    padding:10px 16px;
+    background:white;
+    border:1px solid #dcdcdc;
+    border-radius:10px;
+    text-decoration:none;
+    color:#1f2a6c;
+    font-weight:600;
+    transition:.3s;
+}
+
+.pagination li a:hover{
+    background:#3b82f6;
+    color:white;
+    transform:translateY(-2px);
+}
+
+.pagination li.active a{
+    background:#1f2a6c;
+    color:white;
+    border-color:#1f2a6c;
+}
+
+.pagination li.disabled span{
+    display:block;
+    padding:10px 16px;
+    border-radius:10px;
+    background:#f1f1f1;
+    color:#999;
+}
+
+img{
+    border-radius:8px;
+}
+
 </style>
 
 <div class="container-fluid">
@@ -134,14 +227,11 @@
             </tr>
         </thead>
 
-        <tbody>
-
-        <?php foreach($items as $i => $item): ?>
-
-        <tr>
-
-            <td><?= $i + 1 ?></td>
-
+       <tbody>
+        <?php $no = 1 + (5 * ($currentPage - 1)); ?>
+        <?php foreach($items as $item): ?>
+            <tr>
+                <td><?= $no++ ?></td>
             <td>
                 <img src="<?= base_url('uploads/' . ($item['image'] ?? 'default.png')) ?>"
                      width="50">
@@ -211,7 +301,7 @@
     <div class="d-flex justify-content-between mt-3">
 
         <div>
-            <?= $pager->links() ?>
+         <?= $pager->links('default', 'custom') ?>
         </div>
 
         <div>

@@ -34,14 +34,18 @@
                     <th>Jumlah</th>
                     <th>Tanggal Pinjam</th>
                     <th>Status</th>
-                    <th>Aksi</th>
+
+                    <?php if(session()->get('role') == 'admin'): ?>
+                        <th>Aksi</th>
+                    <?php endif; ?>
+
                 </tr>
 
             </thead>
 
             <tbody>
 
-            <?php $no=1; ?>
+            <?php $no = 1; ?>
 
             <?php foreach($data as $d): ?>
 
@@ -61,7 +65,7 @@
 
                 <td>
 
-                    <?php if($d['status']=='dipinjam'): ?>
+                    <?php if($d['status'] == 'dipinjam'): ?>
 
                         <span class="badge bg-warning">
                             Dipinjam
@@ -77,6 +81,8 @@
 
                 </td>
 
+                <?php if(session()->get('role') == 'admin'): ?>
+
                 <td>
 
                     <a href="<?= site_url('peminjaman/edit/'.$d['id']) ?>"
@@ -91,6 +97,8 @@
                     </a>
 
                 </td>
+
+                <?php endif; ?>
 
             </tr>
 

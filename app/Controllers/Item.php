@@ -14,41 +14,44 @@ class Item extends BaseController
     }
 
     public function index()
-    {
-        $keyword = $this->request->getGet('keyword');
+{
+    $keyword = $this->request->getGet('keyword');
 
-        $builder = $this->itemModel;
+    $builder = $this->itemModel;
 
-        if ($keyword) {
-            $builder = $builder
-                ->groupStart()
-                    ->like('kode_barang', $keyword)
-                    ->orLike('name', $keyword)
-                    ->orLike('category', $keyword)
-                    ->orLike('location', $keyword)
-                    ->orLike('jenis_aset', $keyword)
-                ->groupEnd();
-        }
-
-        $items = $builder->paginate(5);
-        $pager = $this->itemModel->pager;
-
-        $total = $this->itemModel->countAll();
-
-        $baik   = (new ItemModel())->where('item_condition', 'baik')->countAllResults();
-        $rusak  = (new ItemModel())->where('item_condition', 'rusak')->countAllResults();
-        $hilang = (new ItemModel())->where('item_condition', 'hilang')->countAllResults();
-
-        return view('items/index', [
-            'title'  => 'Data Barang',
-            'items'  => $items,
-            'pager'  => $pager,
-            'total'  => $total,
-            'baik'   => $baik,
-            'rusak'  => $rusak,
-            'hilang' => $hilang
-        ]);
+    if ($keyword) {
+        $builder = $builder
+            ->groupStart()
+                ->like('kode_barang', $keyword)
+                ->orLike('name', $keyword)
+                ->orLike('category', $keyword)
+                ->orLike('location', $keyword)
+                ->orLike('jenis_aset', $keyword)
+            ->groupEnd();
     }
+
+    $page = (int) ($this->request->getVar('page') ?? 1);
+
+    $items = $builder->paginate(5);
+    $pager = $this->itemModel->pager;
+
+    $total = $this->itemModel->countAll();
+
+    $baik   = (new ItemModel())->where('item_condition', 'baik')->countAllResults();
+    $rusak  = (new ItemModel())->where('item_condition', 'rusak')->countAllResults();
+    $hilang = (new ItemModel())->where('item_condition', 'hilang')->countAllResults();
+
+    return view('items/index', [
+        'title'       => 'Data Barang',
+        'items'       => $items,
+        'pager'       => $pager,
+        'currentPage' => $page,
+        'total'       => $total,
+        'baik'        => $baik,
+        'rusak'       => $rusak,
+        'hilang'      => $hilang
+    ]);
+}
 
     public function create()
     {

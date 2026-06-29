@@ -21,7 +21,13 @@ class Auth extends BaseController
                 return redirect()->to('/dashboard');
             }
 
-            return redirect()->to('/dashboard-guru');
+            if (session()->get('role') == 'guru') {
+                return redirect()->to('/dashboard-guru');
+            }
+
+            if (session()->get('role') == 'kepala_sekolah') {
+                return redirect()->to('/dashboard-kepsek');
+            }
         }
 
         return view('auth/login');
@@ -67,7 +73,11 @@ class Auth extends BaseController
             return redirect()->to('/dashboard-guru');
         }
 
-        return redirect()->to('/dashboard');
+        if ($user['role'] == 'kepala_sekolah') {
+            return redirect()->to('/dashboard-kepsek');
+        }
+
+        return redirect()->to('/login');
     }
 
     public function logout()

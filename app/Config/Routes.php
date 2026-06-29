@@ -11,11 +11,12 @@ $routes->get('login', 'Auth::login');
 $routes->post('login/process', 'Auth::process');
 $routes->get('logout', 'Auth::logout');
 $routes->get('generate', 'Auth::generate');
-$routes->get('dashboard-guru', 'Dashboard::guru');
 
 $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('dashboard', 'Dashboard::index');
+    $routes->get('dashboard-guru', 'Dashboard::guru');
+    $routes->get('dashboard-kepsek', 'Dashboard::kepsek');
 
     $routes->get('items', 'Item::index');
     $routes->get('items/create', 'Item::create');
@@ -51,4 +52,4 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('users/edit/(:num)', 'User::edit/$1');
     $routes->post('users/update/(:num)', 'User::update/$1');
     $routes->get('users/delete/(:num)', 'User::delete/$1');
-    });
+});
